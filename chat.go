@@ -244,7 +244,9 @@ type StreamOptions struct {
 type ToolType string
 
 const (
-	ToolTypeFunction ToolType = "function"
+	ToolTypeFunction        ToolType = "function"
+	ToolTypeCodeInterpreter ToolType = "code_interpreter"
+	ToolTypeFileSearch      ToolType = "file_search"
 )
 
 type Tool struct {

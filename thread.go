@@ -25,6 +25,12 @@ type ThreadRequest struct {
 	ToolResources *ToolResourcesRequest `json:"tool_resources,omitempty"`
 }
 
+type ThreadRequestV2 struct {
+	Messages      []ThreadMessageV2     `json:"messages,omitempty"`
+	Metadata      map[string]any        `json:"metadata,omitempty"`
+	ToolResources *ToolResourcesRequest `json:"tool_resources,omitempty"`
+}
+
 type ToolResources struct {
 	CodeInterpreter *CodeInterpreterToolResources `json:"code_interpreter,omitempty"`
 	FileSearch      *FileSearchToolResources      `json:"file_search,omitempty"`
@@ -104,6 +110,18 @@ type ThreadAttachmentTool struct {
 	Type string `json:"type"`
 }
 
+type ThreadMessageV2 struct {
+	Role        ThreadMessageRole           `json:"role"`
+	Content     MessageContent              `json:"content"`
+	Attachments []ThreadMessageV2Attachment `json:"attachments,omitempty"`
+	Metadata    map[string]any              `json:"metadata,omitempty"`
+}
+
+type ThreadMessageV2Attachment struct {
+	FileId string `json:"file_id"`
+	Tools  []Tool `json:"tools,omitempty"`
+}
+
 type ThreadDeleteResponse struct {
 	ID      string `json:"id"`
 	Object  string `json:"object"`
@@ -114,6 +132,18 @@ type ThreadDeleteResponse struct {
 
 // CreateThread creates a new thread.
 func (c *Client) CreateThread(ctx context.Context, request ThreadRequest) (response Thread, err error) {
+	req, err := c.newRequest(ctx, http.MethodPost, c.fullURL(threadsSuffix), withBody(request),
+		withBetaAssistantVersion(c.config.AssistantVersion))
+	if err != nil {
+		return
+	}
+
+	err = c.sendRequest(req, &response)
+	return
+}
+
+// CreateThreadV2 creates a new thread.
+func (c *Client) CreateThreadV2(ctx context.Context, request ThreadRequestV2) (response Thread, err error) {
 	req, err := c.newRequest(ctx, http.MethodPost, c.fullURL(threadsSuffix), withBody(request),
 		withBetaAssistantVersion(c.config.AssistantVersion))
 	if err != nil {
