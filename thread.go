@@ -112,7 +112,7 @@ type ThreadAttachmentTool struct {
 
 type ThreadMessageV2 struct {
 	Role        ThreadMessageRole           `json:"role"`
-	Content     MessageContent              `json:"content"`
+	Content     string                      `json:"content"`
 	Attachments []ThreadMessageV2Attachment `json:"attachments,omitempty"`
 	Metadata    map[string]any              `json:"metadata,omitempty"`
 }
