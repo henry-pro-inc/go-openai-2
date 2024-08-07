@@ -39,8 +39,13 @@ const (
 )
 
 type AssistantTool struct {
-	Type     AssistantToolType   `json:"type"`
-	Function *FunctionDefinition `json:"function,omitempty"`
+	Type       AssistantToolType   `json:"type"`
+	Function   *FunctionDefinition `json:"function,omitempty"`
+	FileSearch *FileSearch         `json:"file_search,omitempty"`
+}
+
+type FileSearch struct {
+	MaxNumResults int `json:"max_num_results,omitempty"`
 }
 
 type AssistantToolFileSearch struct {
